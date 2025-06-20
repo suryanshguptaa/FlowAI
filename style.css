@@ -1877,12 +1877,11 @@ select.form-control {
 
 /* Footer Styles */
 .footer {
-  background: rgb(104, 47, 90);
+  background: var(--color-text);
   color: white;
   padding: 60px 0 20px;
   margin-top: 80px;
 }
-
 .footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1934,7 +1933,7 @@ select.form-control {
 
 .footer-bottom p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 1);  /* pure black */
 }
 
 /* Toast Notifications */

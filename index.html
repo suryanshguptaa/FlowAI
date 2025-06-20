@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowAI - AI-Powered Menstrual Health Tracker</title>
+    <meta name="description" content="AI-powered menstrual cycle tracking and PCOS risk prediction for women's health">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h2>FlowAI</h2>
+            </div>
+            <div class="navbar-menu" id="navbarMenu">
+                <div class="navbar-links">
+                    <a href="#" onclick="showSection('landing')" class="nav-link">Home</a>
+                    <a href="#" onclick="showSection('dashboard')" class="nav-link" id="dashboardLink" style="display: none;">Dashboard</a>
+                </div>
+                <div class="navbar-auth">
+                    <button class="btn btn--outline btn--sm" onclick="showAuth('login')" id="loginBtn">Login</button>
+                    <button class="btn btn--primary btn--sm" onclick="showAuth('register')" id="registerBtn">Register</button>
+                    <button class="btn btn--outline btn--sm" onclick="logout()" id="logoutBtn" style="display: none;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <section id="landing" class="landing">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">AI-Powered Menstrual Health Tracking</h1>
+                    <p class="hero-subtitle">Predict your cycle, assess PCOS risk, and get personalized health insights with advanced AI technology</p>
+                    <div class="hero-cta">
+                        <button class="btn btn--primary btn--lg" onclick="showAuth('register')">Get Started Free</button>
+                        <button class="btn btn--outline btn--lg" onclick="scrollToFeatures()">Learn More</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="cycle-preview">
+                            <div class="cycle-ring">
+                                <div class="cycle-day">Day 12</div>
+                            </div>
+                            <div class="cycle-info">
+                                <div class="cycle-phase">Follicular Phase</div>
+                                <div class="next-event">Ovulation in 10 days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Comprehensive Women's Health Tracking</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <h3>Smart Cycle Prediction</h3>
+                        <p>AI-powered predictions for your next period, ovulation, and fertile window with 89% accuracy</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔬</div>
+                        <h3>PCOS Risk Assessment</h3>
+                        <p>Comprehensive screening to identify potential PCOS symptoms and risk factors</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Health Assistant</h3>
+                        <p>24/7 personalized health guidance and answers to your menstrual health questions</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Advanced Analytics</h3>
+                        <p>Track patterns, identify trends, and gain insights into your menstrual health over time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="benefits">
+            <div class="container">
+                <div class="benefits-content">
+                    <div class="benefits-text">
+                        <h2>Take Control of Your Health</h2>
+                        <div class="benefit-list">
+                            <div class="benefit-item">
+                                <span class="benefit-check">✓</span>
+                                <span>Never be surprised by your period again</span>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-check">✓</span>
+                                <span>Early detection of potential health issues</span>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-check">✓</span>
+                                <span>Personalized insights based on your data</span>
+                            </div>
+                            <div class="benefit-item">
+                                <span class="benefit-check">✓</span>
+                                <span>Share reports with your healthcare provider</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--primary btn--lg" onclick="showAuth('register')">Start Your Journey</button>
+                    </div>
+                    <div class="benefits-visual">
+                        <div class="benefit-cards">
+                            <div class="mini-card prediction-card">
+                                <div class="mini-card-title">Next Period</div>
+                                <div class="mini-card-value">July 6</div>
+                                <div class="mini-card-subtitle">89% confidence</div>
+                            </div>
+                            <div class="mini-card risk-card">
+                                <div class="mini-card-title">PCOS Risk</div>
+                                <div class="mini-card-value">Low</div>
+                                <div class="mini-card-subtitle">Monitor symptoms</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Modals -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="authTitle">Login</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="authForm">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="authEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="authPassword" required>
+                    </div>
+                    <div class="form-group" id="nameGroup" style="display: none;">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="authName">
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width" id="authSubmit">Login</button>
+                </form>
+                <div class="auth-switch">
+                    <p id="authSwitchText">Don't have an account? <a href="#" id="authSwitchLink">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Modal -->
+    <div class="modal" id="onboardingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to FlowAI</h3>
+            </div>
+            <div class="modal-body">
+                <div class="onboarding-step" id="step1">
+                    <h4>Tell us about yourself</h4>
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" id="userAge" min="13" max="60">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Average Cycle Length (days)</label>
+                        <input type="number" class="form-control" id="cycleLength" value="28" min="21" max="35">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Period Start Date</label>
+                        <input type="date" class="form-control" id="lastPeriod">
+                    </div>
+                    <button class="btn btn--primary btn--full-width" onclick="completeOnboarding()">Complete Setup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>FlowAI</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" onclick="showAppSection('dashboard')" class="sidebar-link active" data-section="dashboard">
+                    <span class="sidebar-icon">🏠</span>
+                    Dashboard
+                </a>
+                <a href="#" onclick="showAppSection('calendar')" class="sidebar-link" data-section="calendar">
+                    <span class="sidebar-icon">📅</span>
+                    Period Calendar
+                </a>
+                <a href="#" onclick="showAppSection('symptoms')" class="sidebar-link" data-section="symptoms">
+                    <span class="sidebar-icon">📝</span>
+                    Symptom Tracker
+                </a>
+                <a href="#" onclick="showAppSection('pcos')" class="sidebar-link" data-section="pcos">
+                    <span class="sidebar-icon">🔬</span>
+                    PCOS Assessment
+                </a>
+                <a href="#" onclick="showAppSection('chatbot')" class="sidebar-link" data-section="chatbot">
+                    <span class="sidebar-icon">🤖</span>
+                    AI Assistant
+                </a>
+                <a href="#" onclick="showAppSection('analytics')" class="sidebar-link" data-section="analytics">
+                    <span class="sidebar-icon">📊</span>
+                    Analytics
+                </a>
+                <a href="#" onclick="showAppSection('settings')" class="sidebar-link" data-section="settings">
+                    <span class="sidebar-icon">⚙️</span>
+                    Settings
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard -->
+            <section id="dashboard" class="app-section active">
+                <div class="section-header">
+                    <h2>Dashboard</h2>
+                    <p>Your health overview</p>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card current-status">
+                        <h3>Current Status</h3>
+                        <div class="cycle-overview">
+                            <div class="cycle-day-large">
+                                <span class="day-number" id="currentDay">12</span>
+                                <span class="day-label">Cycle Day</span>
+                            </div>
+                            <div class="cycle-phase-info">
+                                <div class="phase-name" id="currentPhase">Follicular Phase</div>
+                                <div class="next-event" id="nextEvent">Ovulation in 10 days</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card predictions">
+                        <h3>AI Predictions</h3>
+                        <div class="prediction-list">
+                            <div class="prediction-item">
+                                <span class="prediction-label">Next Period</span>
+                                <span class="prediction-value" id="nextPeriodDate">July 6, 2024</span>
+                                <span class="prediction-confidence">89% confidence</span>
+                            </div>
+                            <div class="prediction-item">
+                                <span class="prediction-label">Ovulation</span>
+                                <span class="prediction-value" id="ovulationDate">June 22-24</span>
+                                <span class="prediction-confidence">High probability</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card pcos-risk">
+                        <h3>PCOS Risk Assessment</h3>
+                        <div class="risk-display">
+                            <div class="risk-score">
+                                <div class="risk-meter">
+                                    <div class="risk-fill" style="width: 35%"></div>
+                                </div>
+                                <div class="risk-label">Moderate Risk (35%)</div>
+                            </div>
+                            <button class="btn btn--outline btn--sm" onclick="showAppSection('pcos')">View Details</button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card recent-symptoms">
+                        <h3>Recent Symptoms</h3>
+                        <div class="symptom-summary" id="recentSymptoms">
+                            <div class="symptom-item">
+                                <span class="symptom-name">Cramps</span>
+                                <div class="symptom-scale">
+                                    <div class="scale-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="symptom-value">7/10</span>
+                            </div>
+                            <div class="symptom-item">
+                                <span class="symptom-name">Mood</span>
+                                <span class="symptom-value">Irritable</span>
+                            </div>
+                        </div>
+                        <button class="btn btn--primary btn--sm" onclick="showAppSection('symptoms')">Log Symptoms</button>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="btn btn--primary" onclick="logPeriodStart()">Log Period Start</button>
+                        <button class="btn btn--outline" onclick="showAppSection('symptoms')">Add Symptoms</button>
+                        <button class="btn btn--outline" onclick="showAppSection('chatbot')">Ask AI Assistant</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Period Calendar -->
+            <section id="calendar" class="app-section">
+                <div class="section-header">
+                    <h2>Period Calendar</h2>
+                    <p>Track your menstrual cycle</p>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="btn btn--outline btn--sm" onclick="changeMonth(-1)">&lt; Previous</button>
+                        <h3 id="calendarMonth">June 2024</h3>
+                        <button class="btn btn--outline btn--sm" onclick="changeMonth(1)">Next &gt;</button>
+                    </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-color period"></div>
+                            <span>Period</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ovulation"></div>
+                            <span>Ovulation</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color fertile"></div>
+                            <span>Fertile Window</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color predicted"></div>
+                            <span>Predicted</span>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar days will be generated by JavaScript -->
+                    </div>
+                </div>
+                <div class="period-controls">
+                    <h4>Period Flow Intensity</h4>
+                    <div class="flow-selector">
+                        <button class="flow-btn" data-flow="light">Light</button>
+                        <button class="flow-btn" data-flow="medium">Medium</button>
+                        <button class="flow-btn" data-flow="heavy">Heavy</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Symptom Tracker -->
+            <section id="symptoms" class="app-section">
+                <div class="section-header">
+                    <h2>Symptom Tracker</h2>
+                    <p>Log your daily symptoms</p>
+                </div>
+                <div class="symptom-form">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="symptomDate">
+                    </div>
+                    <div class="symptom-categories">
+                        <div class="symptom-category">
+                            <h4>Physical Symptoms</h4>
+                            <div class="symptom-item">
+                                <label>Cramps (1-10)</label>
+                                <input type="range" class="symptom-slider" id="cramps" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="symptom-item">
+                                <label>Bloating (1-10)</label>
+                                <input type="range" class="symptom-slider" id="bloating" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="symptom-item">
+                                <label>Headache (1-10)</label>
+                                <input type="range" class="symptom-slider" id="headache" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="symptom-item">
+                                <label>Fatigue (1-10)</label>
+                                <input type="range" class="symptom-slider" id="fatigue" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                        </div>
+                        <div class="symptom-category">
+                            <h4>Mood & Mental Health</h4>
+                            <div class="symptom-item">
+                                <label>Overall Mood</label>
+                                <select class="form-control" id="mood">
+                                    <option value="happy">Happy</option>
+                                    <option value="neutral">Neutral</option>
+                                    <option value="sad">Sad</option>
+                                    <option value="anxious">Anxious</option>
+                                    <option value="irritable">Irritable</option>
+                                    <option value="angry">Angry</option>
+                                </select>
+                            </div>
+                            <div class="symptom-item">
+                                <label>Stress Level (1-10)</label>
+                                <input type="range" class="symptom-slider" id="stress" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                        </div>
+                        <div class="symptom-category">
+                            <h4>Skin & Hair</h4>
+                            <div class="symptom-item">
+                                <label>Acne Severity (1-10)</label>
+                                <input type="range" class="symptom-slider" id="acne" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="symptom-item">
+                                <label>Hair Loss (1-10)</label>
+                                <input type="range" class="symptom-slider" id="hairLoss" min="0" max="10" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                        </div>
+                        <div class="symptom-category">
+                            <h4>Other</h4>
+                            <div class="symptom-item">
+                                <label>Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" step="0.1" min="30" max="200">
+                            </div>
+                            <div class="symptom-item">
+                                <label>Notes</label>
+                                <textarea class="form-control" id="symptomNotes" rows="3" placeholder="Any additional notes about how you're feeling..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn--primary btn--full-width" onclick="saveSymptoms()">Save Symptoms</button>
+                </div>
+            </section>
+
+            <!-- PCOS Assessment -->
+            <section id="pcos" class="app-section">
+                <div class="section-header">
+                    <h2>PCOS Risk Assessment</h2>
+                    <p>Comprehensive screening for PCOS symptoms</p>
+                </div>
+                <div class="pcos-assessment">
+                    <div class="risk-overview">
+                        <div class="risk-score-large">
+                            <div class="score-circle">
+                                <div class="score-fill" data-score="35"></div>
+                                <div class="score-text">
+                                    <span class="score-number">35%</span>
+                                    <span class="score-label">Moderate Risk</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="risk-factors">
+                            <h4>Contributing Factors:</h4>
+                            <ul class="factor-list">
+                                <li>Irregular cycles occasionally</li>
+                                <li>Mild acne</li>
+                                <li>Some weight fluctuation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="questionnaire">
+                        <h4>Assessment Questions</h4>
+                        <div class="question-group">
+                            <div class="question">
+                                <label>How regular are your menstrual cycles?</label>
+                                <select class="form-control" id="cycleRegularity">
+                                    <option value="regular">Very regular (within 2-3 days)</option>
+                                    <option value="somewhat">Somewhat regular (within a week)</option>
+                                    <option value="irregular">Irregular (varies by weeks)</option>
+                                    <option value="very-irregular">Very irregular or absent</option>
+                                </select>
+                            </div>
+                            <div class="question">
+                                <label>Do you experience excessive hair growth on face, chest, or back?</label>
+                                <select class="form-control" id="excessHair">
+                                    <option value="none">No excessive hair growth</option>
+                                    <option value="mild">Mild - some extra hair</option>
+                                    <option value="moderate">Moderate - noticeable hair growth</option>
+                                    <option value="severe">Severe - significant hair growth</option>
+                                </select>
+                            </div>
+                            <div class="question">
+                                <label>How would you describe your acne severity?</label>
+                                <select class="form-control" id="acneSeverity">
+                                    <option value="none">No acne</option>
+                                    <option value="mild">Mild - occasional breakouts</option>
+                                    <option value="moderate">Moderate - regular acne</option>
+                                    <option value="severe">Severe - persistent, cystic acne</option>
+                                </select>
+                            </div>
+                            <div class="question">
+                                <label>Do you have difficulty losing weight or experience weight gain?</label>
+                                <select class="form-control" id="weightIssues">
+                                    <option value="none">No weight issues</option>
+                                    <option value="mild">Mild difficulty with weight</option>
+                                    <option value="moderate">Moderate weight management issues</option>
+                                    <option value="severe">Severe weight gain/difficulty losing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn--primary" onclick="updatePCOSRisk()">Update Assessment</button>
+                    </div>
+                    <div class="recommendations">
+                        <h4>Recommendations</h4>
+                        <div class="recommendation-list">
+                            <div class="recommendation-item">
+                                <span class="rec-icon">📝</span>
+                                <span>Track cycles consistently for 3-6 months</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <span class="rec-icon">👩‍⚕️</span>
+                                <span>Consider consulting a healthcare provider</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <span class="rec-icon">🥗</span>
+                                <span>Maintain a balanced diet low in processed foods</span>
+                            </div>
+                            <div class="recommendation-item">
+                                <span class="rec-icon">🏃‍♀️</span>
+                                <span>Regular exercise can help manage symptoms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Chatbot -->
+            <section id="chatbot" class="app-section">
+                <div class="section-header">
+                    <h2>AI Health Assistant</h2>
+                    <p>Get personalized health guidance</p>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be populated by JavaScript -->
+                    </div>
+                    <div class="chat-input">
+                        <div class="quick-questions">
+                            <button class="quick-btn" onclick="askQuickQuestion('cramps')">Help with cramps</button>
+                            <button class="quick-btn" onclick="askQuickQuestion('pcos')">About PCOS</button>
+                            <button class="quick-btn" onclick="askQuickQuestion('nutrition')">Nutrition tips</button>
+                        </div>
+                        <div class="chat-form">
+                            <input type="text" class="form-control" id="chatInput" placeholder="Ask me anything about your health...">
+                            <button class="btn btn--primary" onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics -->
+            <section id="analytics" class="app-section">
+                <div class="section-header">
+                    <h2>Health Analytics</h2>
+                    <p>Insights and trends from your data</p>
+                </div>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <h4>Cycle Length Trends</h4>
+                        <canvas id="cycleLengthChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Symptom Patterns</h4>
+                        <canvas id="symptomChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Weight Trends</h4>
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                    <div class="stats-summary">
+                        <h4>Health Summary</h4>
+                        <div class="stat-item">
+                            <span class="stat-label">Average Cycle Length</span>
+                            <span class="stat-value">28 days</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Prediction Accuracy</span>
+                            <span class="stat-value">89%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cycles Tracked</span>
+                            <span class="stat-value">7</span>
+                        </div>
+                        <button class="btn btn--outline" onclick="exportData()">Export Health Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings" class="app-section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                    <p>Manage your account and preferences</p>
+                </div>
+                <div class="settings-sections">
+                    <div class="settings-group">
+                        <h4>Personal Information</h4>
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="settingsName" value="Sarah Johnson">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="settingsEmail" value="sarah@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
+                            <input type="number" class="form-control" id="settingsAge" value="26">
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h4>Cycle Settings</h4>
+                        <div class="form-group">
+                            <label class="form-label">Average Cycle Length</label>
+                            <input type="number" class="form-control" id="settingsCycleLength" value="28" min="21" max="35">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Period Length</label>
+                            <input type="number" class="form-control" id="settingsPeriodLength" value="5" min="3" max="8">
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h4>Notifications</h4>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="periodReminders" checked>
+                                Period reminders
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="ovulationReminders" checked>
+                                Ovulation reminders
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="symptomReminders">
+                                Daily symptom reminders
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h4>Privacy & Data</h4>
+                        <button class="btn btn--outline" onclick="exportData()">Export My Data</button>
+                        <button class="btn btn--outline" onclick="clearData()">Clear All Data</button>
+                    </div>
+                    <button class="btn btn--primary" onclick="saveSettings()">Save Settings</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>FlowAI</h4>
+                    <p>AI-powered menstrual health tracking for modern women</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Features</h5>
+                    <ul>
+                        <li>Period Tracking</li>
+                        <li>PCOS Assessment</li>
+                        <li>AI Health Assistant</li>
+                        <li>Health Analytics</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <ul>
+                        <li>Help Center</li>
+                        <li>Privacy Policy</li>
+                        <li>Terms of Service</li>
+                        <li>Contact Us</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FlowAI. All rights reserved.</p>
+                <p><strong>Developed by Suryansh Gupta</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

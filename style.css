@@ -1877,7 +1877,7 @@ select.form-control {
 
 /* Footer Styles */
 .footer {
-  background: var(--color-text);
+  background: rgb(104, 47, 90);
   color: white;
   padding: 60px 0 20px;
   margin-top: 80px;

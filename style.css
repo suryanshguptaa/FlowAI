@@ -1,7 +1,7 @@
 
 :root {
   /* Colors */
-  --color-background: rgba(240, 244, 248, 1);  
+  --color-background: rgba(242, 246, 252, 1); /* Pastel blue */
   --color-surface: rgba(255, 255, 253, 1);
   --color-text: rgba(19, 52, 59, 1);
   --color-text-secondary: rgba(98, 108, 113, 1);

@@ -220,7 +220,7 @@ html {
   font-family: var(--font-family-base);
   line-height: var(--line-height-normal);
   color: var(--color-text);
-  background-color: var(--color-background);
+  background-color: #e0bbff; /* Changed here */
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
